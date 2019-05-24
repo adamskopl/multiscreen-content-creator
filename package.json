@@ -1,0 +1,29 @@
+{
+  "name": "multiscreen-content-creator",
+  "version": "1.0.0",
+  "description": "",
+  "main": ".eslintrc.js",
+  "scripts": {
+    "start": "nodemon server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adamskopl/multiscreen-content-creator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adamskopl/multiscreen-content-creator/issues"
+  },
+  "homepage": "https://github.com/adamskopl/multiscreen-content-creator#readme",
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.17.2"
+  },
+  "dependencies": {
+    "express": "^4.17.0",
+    "socket.io": "^2.2.0",
+    "vue": "^2.6.10"
+  }
+}
