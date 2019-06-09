@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "express": "^4.17.0",
+    "normalize.css": "^8.0.1",
     "socket.io": "^2.2.0",
     "vue": "^2.6.10"
   }
