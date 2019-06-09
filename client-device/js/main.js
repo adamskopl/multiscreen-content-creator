@@ -6,10 +6,9 @@ const app = new Vue({
   created() {
     this.socket = io();
 
-    
     this.socket.on('connect', function () {
       console.warn('CONNECTED');
-      this.id = this.socket.id;  
+      this.id = this.socket.id;
     }.bind(this));
 
     this.socket.emit('dimensions', {
