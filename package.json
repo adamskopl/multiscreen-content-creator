@@ -4,7 +4,7 @@
   "description": "",
   "main": ".eslintrc.js",
   "scripts": {
-    "start": "nodemon server/server.js"
+    "start": "nodemon --experimental-modules server/server.mjs"
   },
   "repository": {
     "type": "git",

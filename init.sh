@@ -2,6 +2,9 @@
 
 # run after npm install
 
-mkdir -p client/libs
-cp node_modules/socket.io-client/dist/socket.io.js client/libs
-cp node_modules/vue/dist/vue.js client/libs
+LIB_DIRS=( "client-device" "client-editor" )
+for libDir in "${LIB_DIRS[@]}"
+do
+    mkdir -p $libDir/libs
+    cp node_modules/socket.io-client/dist/socket.io.js node_modules/vue/dist/vue.js $libDir/libs
+done

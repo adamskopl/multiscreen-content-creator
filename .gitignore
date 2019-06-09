@@ -1,2 +1,4 @@
 node_modules
-client/libs
+
+client-device/libs
+client-editor/libs
