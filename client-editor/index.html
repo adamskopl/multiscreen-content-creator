@@ -8,8 +8,9 @@
 
 <div id="app">
   <button
-    v-on:click="onClick"
     v-for="device in devices"
+    :key="device.id"
+    v-on:click="onClick(device.id)"
   >
     {{device.id}}
   </button>

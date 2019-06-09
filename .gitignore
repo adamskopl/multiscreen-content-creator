@@ -1,4 +1,3 @@
 node_modules
 
-client-device/libs
-client-editor/libs
+libs

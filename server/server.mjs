@@ -20,6 +20,7 @@ const servers = {
 };
 
 servers.editor.app.use('/', express.static('client-editor'));
+servers.editor.app.use('/libs', express.static('libs'));
 servers.editor.httpServer = http.Server(servers.editor.app);
 servers.editor.httpServer.listen(servers.editor.port, () => {
   console.log(`[editor] listening on port ${servers.editor.port}`);
@@ -27,6 +28,8 @@ servers.editor.httpServer.listen(servers.editor.port, () => {
 servers.editor.ioServer = IOServer(servers.editor.httpServer);
 
 servers.device.app.use('/', express.static('client-device'));
+servers.device.app.use('/assets', express.static('assets'));
+servers.device.app.use('/libs', express.static('libs'));
 servers.device.httpServer = http.Server(servers.device.app);
 servers.device.httpServer.listen(servers.device.port, () => {
   console.log(`[device] listening on port ${servers.device.port}`);

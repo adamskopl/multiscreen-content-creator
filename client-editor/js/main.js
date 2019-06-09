@@ -4,8 +4,9 @@ const app = new Vue({
     devices: [],
   },
   methods: {
-    onClick() {
-      this.socket.emit('press');
+    onClick(id) {
+      console.warn(id)
+      this.socket.emit('editor-test', id);
     },
   },
   created() {

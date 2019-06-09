@@ -9,26 +9,26 @@ export const ioServers = {
     this.devices = new Map();
   },
   onConnectionEditor(socket) {
-    socket.on('press', function () {
-      
+    socket.on('editor-test', (id) => {
+      this.ioServerDevice.to(id).emit('test-add', 'assets/test.jpg');
     });
 
-    socket.on('device.list', function (cb) {
-      const devices = [];
-      this.devices.forEach(function (value, key) {
-        devices.push({ id: key });
+    socket.on('device.list', (cb) => {
+      this.ioServerDevice.clients((error, clients) => {
+        cb(clients.map(
+          id => ({ id }),
+        ));
       });
-      cb(devices);
-    }.bind(this));
+    });
 
     console.warn('[editor] socket connected');
   },
   onConnectionDevice(socket) {
-    socket.on('disconnect', function () {
+    socket.on('disconnect', () => {
       console.warn(`[device] disconnect (${socket.id})`);
       this.ioServerEditor.emit('device.disconnect', { id: socket.id });
       this.devices.delete(socket.id);
-    }.bind(this));
+    });
 
     console.warn(`[device] connect (${socket.id})`);
     this.devices.set(socket.id, {});
