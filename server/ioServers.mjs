@@ -5,8 +5,6 @@ export const ioServers = {
 
     this.ioServerEditor.on('connection', this.onConnectionEditor.bind(this));
     this.ioServerDevice.on('connection', this.onConnectionDevice.bind(this));
-
-    this.devices = new Map();
   },
   onConnectionEditor(socket) {
     socket.on('test-html', (data) => {
@@ -27,11 +25,16 @@ export const ioServers = {
     socket.on('disconnect', () => {
       console.warn(`[device] disconnect (${socket.id})`);
       this.ioServerEditor.emit('device.disconnect', { id: socket.id });
-      this.devices.delete(socket.id);
+    });
+
+    socket.on('login', (data) => {
+      this.ioServerEditor.emit('device.login', {
+        id: socket.id,
+        width: data.width,
+        height: data.height,
+      });
     });
 
     console.warn(`[device] connect (${socket.id})`);
-    this.devices.set(socket.id, {});
-    this.ioServerEditor.emit('device.connect', { id: socket.id });
   },
 };

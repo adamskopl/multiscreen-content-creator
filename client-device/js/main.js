@@ -3,7 +3,7 @@ const app = new Vue({
   data: {
     id: null,
     src: 'assets/test.jpg',
-    contentHtml: ''
+    contentHtml: '',
   },
   created() {
     this.socket = io();
@@ -15,8 +15,9 @@ const app = new Vue({
     this.socket.on('test-html', (html) => {
       this.contentHtml = html;
     });
-
-    this.socket.emit('dimensions', {
+  },
+  mounted() {
+    this.socket.emit('login', {
       width: document.documentElement.clientWidth,
       height: document.documentElement.clientHeight,
     });

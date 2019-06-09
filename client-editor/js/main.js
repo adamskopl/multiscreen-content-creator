@@ -2,6 +2,8 @@ const app = new Vue({
   el: '#app',
   data: {
     devices: [],
+    clientWidth: null,
+    clientHeight: null,
     testImgSrc: 'assets/test-border.jpg',
   },
   methods: {
@@ -12,21 +14,34 @@ const app = new Vue({
         html: editorAreaElement.innerHTML
       });
     },
+    onResize() {
+      this.clientWidth = document.documentElement.clientWidth;
+      this.clientHeight = document.documentElement.clientHeight;
+    },
   },
   created() {
     this.socket = io();
 
-    this.socket.emit('device.list', function (devices) {
-      this.devices.push(...devices);
-    }.bind(this));
-
-    this.socket.on('device.connect', function (device) {
-      this.devices.push({ id: device.id });
-    }.bind(this));
-
-    this.socket.on('device.disconnect', function (device) {
+    // subscriptions
+    this.socket.on('device.login', (device) => {
+      this.devices.push(device);
+      console.warn(`${device.id} ${device.width}x${device.height}`);
+    });
+    this.socket.on('device.disconnect', (device) => {
       removeDevice(this.devices, device);
-    }.bind(this));
+    });
+
+    // init
+    this.socket.emit('device.list', (devices) => {
+      devices.forEach((device) => {
+        console.warn(`${device.id} ${device.width}x${device.height}`);
+      });
+      this.devices.push(...devices);
+    });
+  },
+  mounted() {
+    this.onResize();
+    window.addEventListener('resize', this.onResize);
   },
 });
 
