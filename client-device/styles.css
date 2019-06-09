@@ -1,0 +1,18 @@
+* {
+    box-sizing: border-box;
+}
+
+
+#app {
+    overflow: hidden;
+    height: 100vh;
+}
+
+.contentDiv {
+    transform: scale(1.0) translateX(0px) translateY(0px);
+    transform-origin: 0 0;
+}
+
+.test {
+    color: red;
+}

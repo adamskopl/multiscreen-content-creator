@@ -20,6 +20,7 @@ const servers = {
 };
 
 servers.editor.app.use('/', express.static('client-editor'));
+servers.editor.app.use('/assets', express.static('assets'));
 servers.editor.app.use('/libs', express.static('libs'));
 servers.editor.httpServer = http.Server(servers.editor.app);
 servers.editor.httpServer.listen(servers.editor.port, () => {

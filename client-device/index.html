@@ -1,15 +1,23 @@
 <!doctype html>
 <title>MCC</title>
 
+<link rel="stylesheet" href="./styles.css">
+<link rel="stylesheet" href="libs/normalize.css">
+
 <script src="libs/socket.io.js"></script>
 <script src="libs/vue.js"></script>
 
 <script src="js/main.js" type="module"></script>
 
-<div id="app">
-  {{id}}
-  <img
-    :src="src"
-    v-if="src !== null"
+<div
+  id="app"
+>
+  <div style="position: absolute">
+    {{id}}
+  </div>
+  <div
+    class="contentDiv"
+    v-html="contentHtml"
   >
+  </div>
 </div>

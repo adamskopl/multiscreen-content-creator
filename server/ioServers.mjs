@@ -9,8 +9,8 @@ export const ioServers = {
     this.devices = new Map();
   },
   onConnectionEditor(socket) {
-    socket.on('editor-test', (id) => {
-      this.ioServerDevice.to(id).emit('test-add', 'assets/test.jpg');
+    socket.on('test-html', (data) => {
+      this.ioServerDevice.to(data.id).emit('test-html', data.html);
     });
 
     socket.on('device.list', (cb) => {

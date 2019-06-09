@@ -1,17 +1,26 @@
 <!doctype html>
 <title>MCC</title>
 
+<link rel="stylesheet" href="./styles.css">
+<link rel="stylesheet" href="libs/normalize.css">
+
 <script src="libs/socket.io.js"></script>
 <script src="libs/vue.js"></script>
 
 <script src="js/main.js" type="module"></script>
 
 <div id="app">
-  <button
-    v-for="device in devices"
-    :key="device.id"
-    v-on:click="onClick(device.id)"
-  >
-    {{device.id}}
-  </button>
+  <div class="device-buttons">
+    <button
+      v-for="device in devices"
+      :key="device.id"
+      v-on:click="onDeviceClick(device.id)"
+    >
+      {{device.id}}
+    </button>
+  </div>
+
+  <div class="editor-area">
+    <img :src="testImgSrc">
+  </div>
 </div>

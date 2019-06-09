@@ -2,7 +2,8 @@ const app = new Vue({
   el: '#app',
   data: {
     id: null,
-    src: null
+    src: 'assets/test.jpg',
+    contentHtml: ''
   },
   created() {
     this.socket = io();
@@ -11,9 +12,8 @@ const app = new Vue({
       this.id = this.socket.id;
     });
 
-    this.socket.on('test-add', (src) => {
-      console.warn(src);
-      this.src = src;
+    this.socket.on('test-html', (html) => {
+      this.contentHtml = html;
     });
 
     this.socket.emit('dimensions', {

@@ -2,11 +2,15 @@ const app = new Vue({
   el: '#app',
   data: {
     devices: [],
+    testImgSrc: 'assets/test-border.jpg',
   },
   methods: {
-    onClick(id) {
-      console.warn(id)
-      this.socket.emit('editor-test', id);
+    onDeviceClick(id) {
+      const editorAreaElement = document.querySelector('.editor-area');
+      this.socket.emit('test-html', {
+        id,
+        html: editorAreaElement.innerHTML
+      });
     },
   },
   created() {
