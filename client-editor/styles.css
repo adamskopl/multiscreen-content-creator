@@ -7,6 +7,10 @@
 }
 
 .editor-area {
-    border: 5px solid black;
-    height: 100vh;
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    width: 1024px;
+    height: 768px;
+    border: 1px dashed black;
 }

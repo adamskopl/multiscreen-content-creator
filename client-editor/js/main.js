@@ -4,7 +4,7 @@ const app = new Vue({
     devices: [],
     clientWidth: null,
     clientHeight: null,
-    testImgSrc: 'assets/test-border.jpg',
+    testImgSrc: 'assets/test-grid.jpg',
   },
   methods: {
     onDeviceClick(id) {
@@ -26,6 +26,8 @@ const app = new Vue({
     this.socket.on('device.login', (device) => {
       this.devices.push(device);
       console.warn(`${device.id} ${device.width}x${device.height}`);
+
+      this.onDeviceClick(device.id);
     });
     this.socket.on('device.disconnect', (device) => {
       removeDevice(this.devices, device);
