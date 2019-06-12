@@ -8,9 +8,21 @@
 
 .editor-area {
     position: absolute;
+    overflow: hidden;
     top: 50px;
     left: 50px;
     width: 1024px;
     height: 768px;
-    border: 1px dashed black;
+    border: 1px solid black;
+}
+
+.editor-area__content-container {
+    potision: absolute;
+    top: 0;
+}
+
+.editor-area__canvas-container {
+    position: absolute;
+    top: 0;
+    border: 2px dashed #7f1576;
 }

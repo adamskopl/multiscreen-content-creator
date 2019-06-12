@@ -9,7 +9,8 @@ module.exports = {
     'SharedArrayBuffer': 'readonly',
     'window': true,
     'Vue': true,
-    'io': true
+    'io': true,
+    'PIXI': true
   },
   'parserOptions': {
     'ecmaVersion': 2018,
@@ -25,7 +26,19 @@ module.exports = {
     'prefer-arrow-callback': 'off',
     'prefer-const': 'off',
     'prefer-rest-params': 'off',
-    'function-paren-newline': ['error', 'consistent']
+    'function-paren-newline': ['error', 'consistent'],
+    'no-param-reassign': 'off',
+    'comma-dangle': [
+      'error', {
+        'arrays': 'always',
+        'objects': 'always',
+        'imports': 'always',
+        'exports': 'always',
+        'functions': 'ignore'
+      }
+    ],
+    // RAPID DEV SETTINGS SECTION:
+    'no-debugger': 'off'
   },
   'plugins': [
     'import'

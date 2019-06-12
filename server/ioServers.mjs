@@ -11,6 +11,10 @@ export const ioServers = {
       this.ioServerDevice.to(data.id).emit('test-html', data.html);
     });
 
+    socket.on('device.relogin', () => {
+      this.ioServerDevice.emit('device.relogin');
+    });
+
     socket.on('device.list', (cb) => {
       this.ioServerDevice.clients((error, clients) => {
         cb(clients.map(
