@@ -18,9 +18,14 @@ export const ioServers = {
     socket.on('device.list', (cb) => {
       this.ioServerDevice.clients((error, clients) => {
         cb(clients.map(
-          id => ({ id }),
+          id => ({ id, }),
         ));
       });
+    });
+
+    socket.on('device.transform', (transformData) => {
+      this.ioServerDevice.to(transformData.deviceId)
+        .emit('device.transform', transformData);
     });
 
     console.warn('[editor] socket connected');

@@ -2,13 +2,29 @@ const app = new Vue({
   el: '#app',
   data: {
     id: null,
-    devicePixelRatio: null,
     contentHtml: '',
     clientWidth: null,
     clientHeight: null,
+
+    contentStyleProps: {
+      scale: 1.0,
+      translateX: 0,
+      translateY: 0,
+    },
+  },
+  computed: {
+    contentStyle() {
+      return {
+        transform: `
+          scale(${this.contentStyleProps.scale})
+          translateX(${this.contentStyleProps.translateX}px)
+          translateY(${this.contentStyleProps.translateY}px)
+        `,
+      };
+    },
   },
   methods: {
-    onResize() {
+    onWindowResize() {
       this.clientWidth = document.documentElement.clientWidth;
       this.clientHeight = document.documentElement.clientHeight;
       this.login();
@@ -18,6 +34,10 @@ const app = new Vue({
         width: document.documentElement.clientWidth,
         height: document.documentElement.clientHeight,
       });
+    },
+    onDeviceTransform(transformData) {
+      this.contentStyleProps.translateX = -transformData.translateX;
+      this.contentStyleProps.translateY = -transformData.translateY;
     },
   },
   created() {
@@ -29,6 +49,8 @@ const app = new Vue({
 
     this.socket.on('device.relogin', this.login.bind(this));
 
+    this.socket.on('device.transform', this.onDeviceTransform.bind(this));
+
     this.socket.on('test-html', (html) => {
       this.contentHtml = html;
     });
@@ -36,7 +58,7 @@ const app = new Vue({
   mounted() {
     this.devicePixelRatio = window.devicePixelRatio;
 
-    this.onResize();
-    window.addEventListener('resize', this.onResize);
+    this.onWindowResize();
+    window.addEventListener('resize', this.onWindowResize);
   },
 });

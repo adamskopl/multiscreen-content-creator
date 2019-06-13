@@ -23,12 +23,13 @@
   <div
     class="contentDiv"
     v-html="contentHtml"
+    :style="contentStyle"
   ></div>
 
-  <div style="position: absolute; width: 100px; height: 100px; background-color: red;"></div>
+  <!-- <div style="position: absolute; width: 100px; height: 100px; background-color: red;"></div> -->
 
-  <div style="position: absolute; color: white; font-size: 2em">
-    {{id}}, devicePixelRatio: {{devicePixelRatio}}, {{clientWidth}}x{{clientHeight}}
+  <div style="position: absolute; color: green; font-size: 2em">
+    {{id}}, {{clientWidth}}x{{clientHeight}}
   </div>
 
 </div>

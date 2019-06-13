@@ -8,6 +8,5 @@ body {
 
 .contentDiv {
     position: absolute;
-    transform: scale(1.0) translateX(0px) translateY(0px);
     transform-origin: 0 0;
 }

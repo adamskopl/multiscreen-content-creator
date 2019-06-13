@@ -51,6 +51,12 @@ const app = new Vue({
       const device = this.devices.get(positionData.deviceId);
       device.x = positionData.x;
       device.y = positionData.y;
+
+      this.socket.emit('device.transform', {
+        deviceId: device.id,
+        translateX: device.x,
+        translateY: device.y,
+      });
     },
   },
   mounted() {
