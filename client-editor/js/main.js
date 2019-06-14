@@ -61,7 +61,7 @@ const app = new Vue({
   },
   mounted() {
     this.devicesRenderer = this.$refs.devicesRenderer;
-    this.socket = io();
+    this.socket = io('/editor');
     this.socket.on('device.login', this.onDeviceLogin.bind(this));
     this.socket.on('device.disconnect', this.onDeviceDisconnect.bind(this));
 

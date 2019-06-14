@@ -1,7 +1,3 @@
-/**
- * @typedef {Object} Device
- */
-
 export const factoryDevice = {
   create({
     id = null,

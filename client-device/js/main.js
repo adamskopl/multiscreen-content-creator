@@ -41,10 +41,11 @@ const app = new Vue({
     },
   },
   created() {
-    this.socket = io();
+    this.socket = io('/devices');
 
     this.socket.on('connect', () => {
       this.id = this.socket.id;
+      console.warn(window.location.pathname.split('/')[2]);
     });
 
     this.socket.on('device.relogin', this.login.bind(this));

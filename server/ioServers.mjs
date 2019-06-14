@@ -1,22 +1,22 @@
 export const ioServers = {
-  init(ioServerEditor, ioServerDevice) {
-    this.ioServerEditor = ioServerEditor;
-    this.ioServerDevice = ioServerDevice;
+  init(ioServer) {
+    this.nspDevices = ioServer.of('/devices');
+    this.nspEditor = ioServer.of('/editor');
 
-    this.ioServerEditor.on('connection', this.onConnectionEditor.bind(this));
-    this.ioServerDevice.on('connection', this.onConnectionDevice.bind(this));
+    this.nspDevices.on('connection', this.onConnectionDevice.bind(this));
+    this.nspEditor.on('connection', this.onConnectionEditor.bind(this));
   },
   onConnectionEditor(socket) {
     socket.on('test-html', (data) => {
-      this.ioServerDevice.to(data.id).emit('test-html', data.html);
+      this.nspDevices.to(data.id).emit('test-html', data.html);
     });
 
     socket.on('device.relogin', () => {
-      this.ioServerDevice.emit('device.relogin');
+      this.nspDevices.emit('device.relogin');
     });
 
     socket.on('device.list', (cb) => {
-      this.ioServerDevice.clients((error, clients) => {
+      this.nspDevices.clients((error, clients) => {
         cb(clients.map(
           id => ({ id, }),
         ));
@@ -24,7 +24,7 @@ export const ioServers = {
     });
 
     socket.on('device.transform', (transformData) => {
-      this.ioServerDevice.to(transformData.deviceId)
+      this.nspDevices.to(transformData.deviceId)
         .emit('device.transform', transformData);
     });
 
@@ -33,11 +33,11 @@ export const ioServers = {
   onConnectionDevice(socket) {
     socket.on('disconnect', () => {
       console.warn(`[device] disconnect (${socket.id})`);
-      this.ioServerEditor.emit('device.disconnect', { id: socket.id });
+      this.nspEditor.emit('device.disconnect', { id: socket.id });
     });
 
     socket.on('login', (data) => {
-      this.ioServerEditor.emit('device.login', {
+      this.nspEditor.emit('device.login', {
         id: socket.id,
         width: data.width,
         height: data.height,
