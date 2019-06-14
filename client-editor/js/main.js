@@ -13,7 +13,7 @@ const app = new Vue({
     onDeviceClick(id) {
       const editorAreaElement = document
         .querySelector('.editor-area__content-container');
-      this.socket.emit('test-html', {
+      this.socket.emit('device.set-html', {
         id,
         html: editorAreaElement.innerHTML,
       });
@@ -62,12 +62,12 @@ const app = new Vue({
   mounted() {
     this.devicesRenderer = this.$refs.devicesRenderer;
     this.socket = io('/editor');
+
     this.socket.on('device.login', this.onDeviceLogin.bind(this));
     this.socket.on('device.disconnect', this.onDeviceDisconnect.bind(this));
 
-    window.addEventListener('resize', this.onResize);
-
-    this.onResize();
-    this.socket.emit('device.relogin');
+    this.socket.on('connect', () => {
+      this.socket.emit('device.relogin');
+    });
   },
 });

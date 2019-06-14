@@ -1,6 +1,7 @@
 import http from 'http';
 import express from 'express';
 import IOServer from 'socket.io';
+import uuid from 'uuid/v1';
 
 import { ioServers, } from './ioServers.mjs';
 
@@ -14,8 +15,7 @@ app.all('/', (req, res) => {
 app.use('/editor', express.static('client-editor'));
 
 app.get('/devices', (req, res) => {
-  // TODO add devices manager or something like that
-  res.redirect('/devices/123');
+  res.redirect(`/devices/${uuid().substr(0, 8)}`); // only part of uuid used
 });
 app.use('/devices/:id', express.static('client-device'));
 

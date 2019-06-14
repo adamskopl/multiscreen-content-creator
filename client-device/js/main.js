@@ -24,11 +24,6 @@ const app = new Vue({
     },
   },
   methods: {
-    onWindowResize() {
-      this.clientWidth = document.documentElement.clientWidth;
-      this.clientHeight = document.documentElement.clientHeight;
-      this.login();
-    },
     login() {
       this.socket.emit('login', {
         width: document.documentElement.clientWidth,
@@ -40,7 +35,7 @@ const app = new Vue({
       this.contentStyleProps.translateY = -transformData.translateY;
     },
   },
-  created() {
+  mounted() {
     this.socket = io('/devices');
 
     this.socket.on('connect', () => {
@@ -49,17 +44,12 @@ const app = new Vue({
     });
 
     this.socket.on('device.relogin', this.login.bind(this));
-
     this.socket.on('device.transform', this.onDeviceTransform.bind(this));
-
-    this.socket.on('test-html', (html) => {
+    this.socket.on('device.set-html', (html) => {
       this.contentHtml = html;
     });
-  },
-  mounted() {
-    this.devicePixelRatio = window.devicePixelRatio;
 
-    this.onWindowResize();
-    window.addEventListener('resize', this.onWindowResize);
+    this.login();
+    window.addEventListener('resize', this.login.bind(this));
   },
 });

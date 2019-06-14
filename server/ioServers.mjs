@@ -7,8 +7,8 @@ export const ioServers = {
     this.nspEditor.on('connection', this.onConnectionEditor.bind(this));
   },
   onConnectionEditor(socket) {
-    socket.on('test-html', (data) => {
-      this.nspDevices.to(data.id).emit('test-html', data.html);
+    socket.on('device.set-html', (data) => {
+      this.nspDevices.to(data.id).emit('device.set-html', data.html);
     });
 
     socket.on('device.relogin', () => {
