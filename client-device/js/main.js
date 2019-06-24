@@ -1,11 +1,7 @@
 const app = new Vue({
   el: '#app',
   data: {
-    id: null,
     contentHtml: '',
-    clientWidth: null,
-    clientHeight: null,
-
     contentStyleProps: {
       scale: 1.0,
       translateX: 0,
@@ -25,31 +21,37 @@ const app = new Vue({
   },
   methods: {
     login() {
-      this.socket.emit('login', {
+      this.socket.emit('device.login', {
+        id: getDeviceId(),
         width: document.documentElement.clientWidth,
         height: document.documentElement.clientHeight,
       });
     },
-    onDeviceTransform(transformData) {
-      this.contentStyleProps.translateX = -transformData.translateX;
-      this.contentStyleProps.translateY = -transformData.translateY;
+    onDeviceContentChange(contentData) {
+      this.contentHtml = contentData.html
+        || this.contentHtml;
+      this.contentStyleProps.translateX = -contentData.transformData.x
+        || this.contentStyleProps.translateX;
+      this.contentStyleProps.translateY = -contentData.transformData.y
+        || this.contentStyleProps.translateY;
     },
   },
   mounted() {
     this.socket = io('/devices');
 
     this.socket.on('connect', () => {
-      this.id = this.socket.id;
-      console.warn(window.location.pathname.split('/')[2]);
+      this.login();
     });
 
     this.socket.on('device.relogin', this.login.bind(this));
-    this.socket.on('device.transform', this.onDeviceTransform.bind(this));
-    this.socket.on('device.set-html', (html) => {
-      this.contentHtml = html;
-    });
+    this.socket.on('device.content-change',
+      this.onDeviceContentChange.bind(this));
 
-    this.login();
     window.addEventListener('resize', this.login.bind(this));
   },
 });
+
+function getDeviceId() {
+  // http://localhost:3000/devices/01aa6930/
+  return window.location.pathname.split('/')[2];
+}

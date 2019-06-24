@@ -1,3 +1,7 @@
+/**
+ * @typedef {Object} Device
+ */
+
 export const factoryDevice = {
   create({
     id = null,
@@ -5,6 +9,8 @@ export const factoryDevice = {
     y = 0,
     width = 0,
     height = 0,
+    // assumption: only one socket for each device
+    socketId = null,
   }) {
     return {
       id,
@@ -12,6 +18,7 @@ export const factoryDevice = {
       y,
       width,
       height,
+      socketId,
     };
   },
 };

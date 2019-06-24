@@ -1,14 +1,14 @@
 import { factoryDeviceGraphic, } from './factories.js';
 
-const editorWidth = 1024;
-const editorHeight = 768;
+const editorWidth = 1600;
+const editorHeight = 900;
 
 Vue.component('devices-renderer', {
   data() {
     return {
       pixiApp: null,
-      // @key {Device.id}
-      // @value {Pixi.Graphics}
+      // @key {string} Device.id value
+      // @value {DeviceGraphic}
       graphics: new Map(),
     };
   },
@@ -35,10 +35,10 @@ Vue.component('devices-renderer', {
         deviceGraphic,
       );
     },
-    destroyDevice(device) {
-      if (this.graphics.get(device.id) === undefined) { debugger; }
-      this.graphics.get(device.id).graphic.destroy();
-      this.graphics.delete(device.id);
+    destroyDevice(deviceId) {
+      if (this.graphics.get(deviceId) === undefined) { return; }
+      this.graphics.get(deviceId).graphic.destroy();
+      this.graphics.delete(deviceId);
     },
   },
   mounted() {
@@ -103,7 +103,7 @@ function onPointerMove(deviceGraphic, event) {
     deviceGraphic.graphic.y = newGraphicY;
 
     this.$emit('device-position-change', {
-      deviceId: deviceGraphic.deviceId,
+      id: deviceGraphic.deviceId,
       x: newGraphicX,
       y: newGraphicY,
     });
