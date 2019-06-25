@@ -1,3 +1,17 @@
+import { debounce, } from './utils.js';
+import {} from './calibrationSetter.js';
+
+const calibrationVisiblityDebounce = 5000;
+
+function getDeviceId() {
+  // http://localhost:3000/devices/01aa6930/
+  return window.location.pathname.split('/')[2];
+}
+
+const hideCalibrationDebounced = debounce(function hideCalibration(app) {
+  app.calibrationVisible = false;
+}, calibrationVisiblityDebounce);
+
 const app = new Vue({
   el: '#app',
   data: {
@@ -7,6 +21,7 @@ const app = new Vue({
       translateX: 0,
       translateY: 0,
     },
+    calibrationVisible: false,
   },
   computed: {
     contentStyle() {
@@ -35,6 +50,19 @@ const app = new Vue({
       this.contentStyleProps.translateY = -contentData.transformData.y
         || this.contentStyleProps.translateY;
     },
+    onCalibrationPlus() {
+      this.contentStyleProps.scale = this.contentStyleProps.scale + 0.03;
+      this.socket.emit('device.calibration', {
+
+      });
+    },
+    onCalibrationMinus() {
+      this.contentStyleProps.scale = this.contentStyleProps.scale - 0.03;
+    },
+    onAppClick() {
+      this.calibrationVisible = true;
+      hideCalibrationDebounced(this);
+    },
   },
   mounted() {
     this.socket = io('/devices');
@@ -50,8 +78,3 @@ const app = new Vue({
     window.addEventListener('resize', this.login.bind(this));
   },
 });
-
-function getDeviceId() {
-  // http://localhost:3000/devices/01aa6930/
-  return window.location.pathname.split('/')[2];
-}

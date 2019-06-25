@@ -6,7 +6,17 @@ body {
     overflow: hidden;
 }
 
-.contentDiv {
+.content {
     position: absolute;
     transform-origin: 0 0;
+}
+
+.calibration-setter {
+    position: absolute;
+}
+
+.calibration-setter__button {
+    display: block;
+    width: 12em;
+    height: 12em;
 }

@@ -33,7 +33,7 @@ const app = new Vue({
     onDevicePositionChange(positionData) {
       this.socket.emit('device.content-change', {
         id: positionData.id,
-        html: null, // sending just transformData
+        html: null, // if null, then should be ignored
         transformData: {
           x: positionData.x,
           y: positionData.y,

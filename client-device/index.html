@@ -16,19 +16,30 @@
 
 <script src="js/main.js" type="module"></script>
 
-<div
-  id="app"
->
+<div id="app" @click="onAppClick">
 
-  <div
-    class="contentDiv"
-    v-html="contentHtml"
-    :style="contentStyle"
-  ></div>
+  <div class="content" v-html="contentHtml" :style="contentStyle"></div>
 
   <!-- <div style="position: absolute; width: 100px; height: 100px; background-color: red;"></div> -->
 
   <div style="position: absolute; color: green; font-size: 2em">
+
   </div>
 
+  <calibration-setter
+    v-if="calibrationVisible"
+    :app-content-style-props="contentStyleProps"
+  ></calibration-setter>
+
 </div>
+
+<template id="calibration-setter">
+  <div class="calibration-setter">
+    <button @click="onCalibrationPlus" class="calibration-setter__button">
+      CALIBRATE +
+    </button>
+    <button @click="onCalibrationMinus" class="calibration-setter__button">
+      CALIBRATE -
+    </button>
+  </div>
+</template>
