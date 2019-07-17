@@ -11,11 +11,11 @@ body {
     transform-origin: 0 0;
 }
 
-.calibration-setter {
+.scale-setter {
     position: absolute;
 }
 
-.calibration-setter__button {
+.scale-setter__button {
     display: block;
     width: 12em;
     height: 12em;

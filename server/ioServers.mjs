@@ -1,59 +1,72 @@
 import { factoryDevice, } from './factories.mjs';
 import { devicesStorage, } from './devicesStorage.mjs';
 
+let content = {
+  html: '',
+};
+
 export const ioServers = {
   init(ioServer) {
     this.nspDevices = ioServer.of('/devices');
     this.nspEditor = ioServer.of('/editor');
 
-    this.nspDevices.on('connection', this.onConnectionDevice.bind(this));
-    this.nspEditor.on('connection', this.onConnectionEditor.bind(this));
+    this.nspDevices.on('connect', this.onConnectDevice.bind(this));
+    this.nspEditor.on('connect', this.onConnectEditor.bind(this));
   },
-  onConnectionEditor(socket) {
-    socket.on('disconnect', () => {
-      console.warn(`[editor] disconnect ${socket.id}`);
+  onConnectEditor(socket) {
+    // get connected devices
+    socket.on('devices.get', (cb) => {
+      this.nspDevices.clients((error, clients) => {
+        cb(clients.map(id => devicesStorage.getBySocketId(id)));
+      });
     });
 
-    socket.on('device.content-change', (contentData) => {
-      // update stored device
-      const device = devicesStorage.get(contentData.id);
-      device.x = contentData.transformData.x;
-      device.y = contentData.transformData.y;
-
-      this.nspDevices.to(devicesStorage.get(contentData.id).socketId)
-        .emit('device.content-change', contentData);
+    socket.on('content.update', (editorContent) => {
+      Object.assign(content, editorContent);
+      this.nspDevices.emit('content.update', content);
     });
 
-    socket.on('device.relogin', () => {
-      this.nspDevices.emit('device.relogin');
+    socket.on('device.update', (id, updatedDevice) => {
+      const device = devicesStorage.get(id);
+      Object.assign(device, updatedDevice);
+      this.nspDevices.to(device.socketId).emit(
+        'device.update',
+        devicesStorage.get(id)
+      );
     });
-
-    console.warn(`[editor] connect ${socket.id}`);
   },
-  onConnectionDevice(socket) {
+  onConnectDevice(socket) {
     socket.on('disconnect', () => {
+      const device = devicesStorage.getBySocketId(socket.id);
+      device.socketId = null;
       this.nspEditor.emit('device.disconnect', {
-        id: devicesStorage.getBySocketId(socket.id).id,
+        id: device.id,
       });
-      console.warn(`[device] disconnect ${socket.id}`);
+      console.warn(`disconnect ${socket.id}`);
     });
 
-    socket.on('device.login', (deviceData) => {
-      const replacedDevice = devicesStorage.get(deviceData.id);
-      const device = factoryDevice.create({
-        id: deviceData.id,
-        x: (deviceData.x === undefined)
-          ? replacedDevice && replacedDevice.x : undefined,
-        y: (deviceData.y === undefined)
-          ? replacedDevice && replacedDevice.y : undefined,
-        width: deviceData.width,
-        height: deviceData.height,
-        socketId: socket.id,
-      });
+    socket.on('device.get', (id, cb) => {
+      cb(devicesStorage.get(id));
+    });
 
-      console.warn('onConnectionDevice. setting ', device.id);
-      devicesStorage.set(device.id, device);
-      this.nspEditor.emit('device.login', device);
+    socket.on('device.login', (id, cb) => {
+      const device = devicesStorage.get(id)
+        || devicesStorage.set(id, factoryDevice.create({
+          id,
+          x: 0,
+          y: 0,
+        }));
+      device.socketId = socket.id;
+      cb(device);
+    });
+
+    socket.on('device.update', (id, device) => {
+      Object.assign(devicesStorage.get(id), device);
+      this.nspEditor.emit('device.update', devicesStorage.get(id));
+    });
+
+    socket.on('content.get', (cb) => {
+      cb(content);
     });
 
     console.warn(`[device] connect ${socket.id}`);

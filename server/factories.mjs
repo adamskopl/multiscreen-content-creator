@@ -1,24 +1,28 @@
+import { arrayIsSubset } from './utils.mjs';
+
 /**
+ * - Device keeps data which can be restored from the server either by 'device'
+ *   client or 'editor' client.
+ * - Data such as displayed content is not kept, because it's shared among all
+ *   the devices and is provided by an 'editor' client.
  * @typedef {Object} Device
  */
 
+const deviceProperties = [
+  'id',
+  'socketId', // assumption: only one socket for each device
+  'x', // device's x, y related to the content
+  'y',
+  'width',
+  'height',
+  'scale', // used for i.a. devices physical size synchronization
+];
+
 export const factoryDevice = {
-  create({
-    id = null,
-    x = 0,
-    y = 0,
-    width = 0,
-    height = 0,
-    // assumption: only one socket for each device
-    socketId = null,
-  }) {
-    return {
-      id,
-      x,
-      y,
-      width,
-      height,
-      socketId,
-    };
+  create(initProperties) {
+    if (!arrayIsSubset(deviceProperties, Object.keys(initProperties))) {
+      console.error(`wrong properties: ${initProperties}`);
+    }
+    return initProperties;
   },
 };

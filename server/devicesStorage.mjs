@@ -5,12 +5,16 @@ export const devicesStorage = {
   get(deviceId) {
     return devices.get(deviceId);
   },
+  getAll() {
+    return Array.from(devices.values());
+  },
   getBySocketId(socketId) {
     return Array.from(devices.values())
       .find(device => device.socketId === socketId);
   },
   set(deviceId, device) {
     devices.set(deviceId, device);
+    return device;
   },
   delete(deviceId) {
     devices.delete(deviceId);

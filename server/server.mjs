@@ -15,6 +15,7 @@ app.all('/', (req, res) => {
 app.use('/editor', express.static('client-editor'));
 
 app.get('/devices', (req, res) => {
+  // redirect to the random id
   res.redirect(`/devices/${uuid().substr(0, 8)}`); // only part of uuid used
 });
 app.use('/devices/:id', express.static('client-device'));

@@ -1,80 +1,77 @@
 import { debounce, } from './utils.js';
-import {} from './calibrationSetter.js';
+import {} from './scaleSetter.js';
 
-const calibrationVisiblityDebounce = 5000;
+const scaleSetterVisiblityDebounce = 5000;
 
 function getDeviceId() {
   // http://localhost:3000/devices/01aa6930/
   return window.location.pathname.split('/')[2];
 }
 
-const hideCalibrationDebounced = debounce(function hideCalibration(app) {
-  app.calibrationVisible = false;
-}, calibrationVisiblityDebounce);
+const hideScaleSetterDebounce = debounce(function hideScaleSetter(app) {
+  app.scaleSetterVisible = false;
+}, scaleSetterVisiblityDebounce);
 
 const app = new Vue({
   el: '#app',
   data: {
-    contentHtml: '',
-    contentStyleProps: {
+    device: { // object synchronized with the server
+      x: 0,
+      y: 0,
       scale: 1.0,
-      translateX: 0,
-      translateY: 0,
     },
-    calibrationVisible: false,
+    content: { // object synchronized with the server
+      html: '',
+    },
+    scaleSetterVisible: false,
   },
   computed: {
     contentStyle() {
       return {
         transform: `
-          scale(${this.contentStyleProps.scale})
-          translateX(${this.contentStyleProps.translateX}px)
-          translateY(${this.contentStyleProps.translateY}px)
+          scale(${this.device.scale})
+          translateX(${-this.device.x}px)
+          translateY(${-this.device.y}px)
         `,
       };
     },
   },
   methods: {
-    login() {
-      this.socket.emit('device.login', {
-        id: getDeviceId(),
-        width: document.documentElement.clientWidth,
-        height: document.documentElement.clientHeight,
-      });
-    },
-    onDeviceContentChange(contentData) {
-      this.contentHtml = contentData.html
-        || this.contentHtml;
-      this.contentStyleProps.translateX = -contentData.transformData.x
-        || this.contentStyleProps.translateX;
-      this.contentStyleProps.translateY = -contentData.transformData.y
-        || this.contentStyleProps.translateY;
-    },
-    onCalibrationPlus() {
-      this.contentStyleProps.scale = this.contentStyleProps.scale + 0.03;
-      this.socket.emit('device.calibration', {
-
-      });
-    },
-    onCalibrationMinus() {
-      this.contentStyleProps.scale = this.contentStyleProps.scale - 0.03;
-    },
     onAppClick() {
-      this.calibrationVisible = true;
-      hideCalibrationDebounced(this);
+      this.scaleSetterVisible = true;
+      hideScaleSetterDebounce(this);
     },
   },
   mounted() {
     this.socket = io('/devices');
 
     this.socket.on('connect', () => {
-      this.login();
+      this.socket.emit('device.login', getDeviceId(), (device) => {
+        Object.assign(this.device, device);
+        this.device.x = 100;
+        this.device.width = document.documentElement.clientWidth;
+        this.device.height = document.documentElement.clientHeight;
+        this.socket.emit('device.update', getDeviceId(), this.device);
+        this.socket.emit('content.get', (content) => {
+          Object.assign(this.content, content);
+        });
+      });
     });
 
-    this.socket.on('device.relogin', this.login.bind(this));
-    this.socket.on('device.content-change',
-      this.onDeviceContentChange.bind(this));
+    this.socket.on('content.update', (content) => {
+      Object.assign(this.content, content);
+    });
 
-    window.addEventListener('resize', this.login.bind(this));
+    this.socket.on('device.update', (device) => {
+      Object.assign(this.device, device);
+    });
+
+    window.addEventListener('resize', () => {
+      Object.assign(this.device, {
+        width: document.documentElement.clientWidth,
+        height: document.documentElement.clientHeight,
+      });
+      this.socket.emit('device.update', getDeviceId(), this.device);
+    });
   },
 });
