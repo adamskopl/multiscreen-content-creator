@@ -4,7 +4,7 @@
   "description": "",
   "main": ".eslintrc.js",
   "scripts": {
-    "start": "nodemon --experimental-modules server/server.mjs"
+    "start": "nodemon --experimental-modules --ignore client-device --ignore client-editor server/server.mjs"
   },
   "repository": {
     "type": "git",
