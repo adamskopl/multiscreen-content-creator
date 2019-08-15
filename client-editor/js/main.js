@@ -20,12 +20,16 @@ const app = new Vue({
     onDeviceDisconnect(deviceData) {
       this.devicesRenderer.destroyDevice(deviceData.id);
     },
-    onDevicePositionChange(positionData) {
+    onDevicePositionChange(device) {
       this.socket.emit('device.update',
-        positionData.id, {
-          x: positionData.x,
-          y: positionData.y,
+        device.id, {
+          x: device.x,
+          y: device.y,
         });
+    },
+    onDeviceClick(data) {
+      this.devicesRenderer.unhighlightDevices();
+      this.devicesRenderer.highlightDevice(data.id);
     },
   },
   mounted() {

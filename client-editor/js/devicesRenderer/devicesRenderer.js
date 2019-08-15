@@ -1,5 +1,6 @@
 import { factoryDeviceGraphic, } from './factories.js';
 import { consts, } from '/common/consts.mjs';
+import { drawDeviceNormal, drawDeviceSelected } from './graphicsDrawing.js';
 
 const contentWidth = 1920;
 const contentHeight = 1080;
@@ -44,6 +45,12 @@ Vue.component('devices-renderer', {
       this.graphics.get(deviceId).graphic.destroy();
       this.graphics.delete(deviceId);
     },
+    unhighlightDevices() {
+      this.graphics.forEach((gd) => { drawDeviceNormal(gd.graphic); });
+    },
+    highlightDevice(deviceId) {
+      drawDeviceSelected(this.graphics.get(deviceId).graphic);
+    },
   },
   mounted() {
     this.pixiApp = new PIXI.Application({
@@ -58,23 +65,17 @@ Vue.component('devices-renderer', {
 });
 
 function draw(app, x, y, width, height) {
-  const graphics = new PIXI.Graphics();
+  const graphic = new PIXI.Graphics();
+  drawDeviceNormal(graphic, width, height);
 
-  graphics.lineStyle(2, 0x7f1576, 1);
-  graphics.beginFill(0x000000, 0.2);
-  graphics.drawRect(0, 0, width, height);
-  graphics.endFill();
+  graphic.interactive = true;
+  graphic.buttonMode = true;
 
-  graphics.interactive = true;
-  graphics.buttonMode = true;
+  graphic.x = x;
+  graphic.y = y;
 
-  graphics.alpha = 0.9;
-
-  graphics.x = x;
-  graphics.y = y;
-
-  app.stage.addChild(graphics);
-  return graphics;
+  app.stage.addChild(graphic);
+  return graphic;
 }
 
 function onPointerDown(deviceGraphic, event) {
@@ -87,6 +88,10 @@ function onPointerDown(deviceGraphic, event) {
     - clickPoint.x;
   deviceGraphic.dragData.clickDistance.y = deviceGraphic.graphic.y
     - clickPoint.y;
+
+  this.$emit('device-click', {
+    id: deviceGraphic.deviceId,
+  });
 }
 
 function onPointerUp(deviceGraphic) {
