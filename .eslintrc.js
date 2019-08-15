@@ -18,6 +18,8 @@ module.exports = {
   },
   'rules': {
     'import/no-extraneous-dependencies': 'off',
+    'import/no-absolute-path': 'off',
+    'import/no-unresolved': 'off',
     'import/extensions': 'off',
     'import/prefer-default-export': 'off',
     'max-len': ['error', 80],
