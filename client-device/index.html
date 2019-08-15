@@ -22,12 +22,14 @@
   <scale-setter
     v-if="scaleSetterVisible"
     :device="device"
+    :socket="socket"
   ></scale-setter>
 
 </div>
 
 <template id="scale-setter">
   <div class="scale-setter">
+    <h1>{{device.scaleMultiplier}}</h1>
     <button @click="onScalePlus" class="scale-setter__button">
       SCALE +
     </button>

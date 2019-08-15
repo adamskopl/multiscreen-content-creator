@@ -14,15 +14,9 @@ function onDeviceUpdate(app, device) {
 const app = new Vue({
   el: '#app',
   data: {
-    clientWidth: null,
-    clientHeight: null,
-    testImgSrc: 'assets/test-grid.jpg',
+    testImgSrc: 'assets/test-bobby-burger-grid.jpg',
   },
   methods: {
-    onResize() {
-      this.clientWidth = document.documentElement.clientWidth;
-      this.clientHeight = document.documentElement.clientHeight;
-    },
     onDeviceDisconnect(deviceData) {
       this.devicesRenderer.destroyDevice(deviceData.id);
     },
@@ -47,6 +41,8 @@ const app = new Vue({
       devices.forEach(onDeviceUpdate.bind(null, this));
     });
 
-    this.socket.emit('content.update', { html: getHtmlContent(), });
+    this.socket.emit('content.update', {
+      html: getHtmlContent(),
+    });
   },
 });

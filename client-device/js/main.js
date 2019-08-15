@@ -1,12 +1,9 @@
-import { debounce, } from './utils.js';
+import { getDeviceId, } from './utils.js';
+import { debounce, } from '/common/utils.mjs';
+import { consts, } from '/common/consts.mjs';
 import {} from './scaleSetter.js';
 
 const scaleSetterVisiblityDebounce = 5000;
-
-function getDeviceId() {
-  // http://localhost:3000/devices/01aa6930/
-  return window.location.pathname.split('/')[2];
-}
 
 const hideScaleSetterDebounce = debounce(function hideScaleSetter(app) {
   app.scaleSetterVisible = false;
@@ -18,7 +15,7 @@ const app = new Vue({
     device: { // object synchronized with the server
       x: 0,
       y: 0,
-      scale: 1.0,
+      scaleMultiplier: 0,
     },
     content: { // object synchronized with the server
       html: '',
@@ -27,9 +24,10 @@ const app = new Vue({
   },
   computed: {
     contentStyle() {
+      const scale = 1 + (this.device.scaleMultiplier * consts.scale);
       return {
         transform: `
-          scale(${this.device.scale})
+          scale(${scale})
           translateX(${-this.device.x}px)
           translateY(${-this.device.y}px)
         `,
@@ -48,10 +46,11 @@ const app = new Vue({
     this.socket.on('connect', () => {
       this.socket.emit('device.login', getDeviceId(), (device) => {
         Object.assign(this.device, device);
-        this.device.x = 100;
-        this.device.width = document.documentElement.clientWidth;
-        this.device.height = document.documentElement.clientHeight;
+
+        this.device.clientWidth = document.documentElement.clientWidth;
+        this.device.clientHeight = document.documentElement.clientHeight;
         this.socket.emit('device.update', getDeviceId(), this.device);
+
         this.socket.emit('content.get', (content) => {
           Object.assign(this.content, content);
         });
@@ -67,10 +66,8 @@ const app = new Vue({
     });
 
     window.addEventListener('resize', () => {
-      Object.assign(this.device, {
-        width: document.documentElement.clientWidth,
-        height: document.documentElement.clientHeight,
-      });
+      this.device.clientWidth = document.documentElement.clientWidth;
+      this.device.clientHeight = document.documentElement.clientHeight;
       this.socket.emit('device.update', getDeviceId(), this.device);
     });
   },

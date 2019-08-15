@@ -3,23 +3,24 @@
   with the same physical dimensions.
 */
 
-const scaleStep = 0.03;
+import { getDeviceId, } from './utils.js';
+
+function onScaleDiff(diff, device, socket) {
+  device.scaleMultiplier += diff;
+  socket.emit('device.update', getDeviceId(), device);
+}
 
 Vue.component('scale-setter', {
-  data() {
-    return {
-
-    };
-  },
   props: [
     'device',
+    'socket',
   ],
   methods: {
     onScalePlus() {
-      this.device.scale += scaleStep;
+      onScaleDiff(1, this.device, this.socket);
     },
     onScaleMinus() {
-      this.device.scale -= scaleStep;
+      onScaleDiff(-1, this.device, this.socket);
     },
   },
   template: '#scale-setter',

@@ -1,7 +1,8 @@
 import { factoryDeviceGraphic, } from './factories.js';
+import { consts, } from '/common/consts.mjs';
 
-const editorWidth = 1600;
-const editorHeight = 900;
+const contentWidth = 1920;
+const contentHeight = 1080;
 
 Vue.component('devices-renderer', {
   data() {
@@ -14,14 +15,17 @@ Vue.component('devices-renderer', {
   },
   methods: {
     drawDevice(device) {
+      const scale = (1 + device.scaleMultiplier * consts.scale);
+      const graphW = device.clientWidth / scale;
+      const graphH = device.clientHeight / scale;
       const deviceGraphic = factoryDeviceGraphic.create({
         deviceId: device.id,
         graphic: draw(
           this.pixiApp,
           device.x,
           device.y,
-          device.width,
-          device.height,
+          graphW,
+          graphH,
         ),
       });
       deviceGraphic.graphic
@@ -43,8 +47,8 @@ Vue.component('devices-renderer', {
   },
   mounted() {
     this.pixiApp = new PIXI.Application({
-      width: editorWidth,
-      height: editorHeight,
+      width: contentWidth,
+      height: contentHeight,
       transparent: true,
       antialias: true,
     });

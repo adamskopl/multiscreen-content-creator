@@ -19,6 +19,7 @@ app.get('/devices', (req, res) => {
   res.redirect(`/devices/${uuid().substr(0, 8)}`); // only part of uuid used
 });
 app.use('/devices/:id', express.static('client-device'));
+app.use('/common', express.static('common'));
 
 app.use('/*/assets', express.static('assets'));
 app.use('/*/libs', express.static('libs'));

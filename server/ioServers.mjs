@@ -1,4 +1,4 @@
-import { factoryDevice, } from './factories.mjs';
+import { factoryDevice, } from '../common/factoryDevice.mjs';
 import { devicesStorage, } from './devicesStorage.mjs';
 
 let content = {
@@ -55,6 +55,7 @@ export const ioServers = {
           id,
           x: 0,
           y: 0,
+          scaleMultiplier: 0,
         }));
       device.socketId = socket.id;
       cb(device);
