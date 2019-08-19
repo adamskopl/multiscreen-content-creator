@@ -1,6 +1,6 @@
 import { factoryDeviceGraphic, } from './factories.js';
 import { consts, } from '/common/consts.mjs';
-import { drawDeviceNormal, drawDeviceSelected } from './graphicsDrawing.js';
+import { drawDeviceNormal, drawDeviceSelected, } from './graphicsDrawing.js';
 
 const contentWidth = 1920;
 const contentHeight = 1080;
@@ -61,7 +61,7 @@ Vue.component('devices-renderer', {
     });
     this.$el.appendChild(this.pixiApp.view);
   },
-  template: '#devices-renderer',
+  template: '<div></div>',
 });
 
 function draw(app, x, y, width, height) {

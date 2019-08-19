@@ -3,12 +3,13 @@
 <title>MCC</title>
 
 <!--
-- block scaling. it will be done from the editor.
-- TODO: try to better understand what this viewport does
+   - block scaling. it will be done from the editor.
+   - TODO: try to better understand what this viewport does
 -->
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="./styles.css">
+<link rel="stylesheet" href="/common/styles.css">
 <link rel="stylesheet" href="libs/normalize.css">
 
 <script src="libs/socket.io.js"></script>
@@ -26,15 +27,3 @@
   ></scale-setter>
 
 </div>
-
-<template id="scale-setter">
-  <div class="scale-setter">
-    <h1>{{device.scaleMultiplier}}</h1>
-    <button @click="onScalePlus" class="scale-setter__button">
-      SCALE +
-    </button>
-    <button @click="onScaleMinus" class="scale-setter__button">
-      SCALE -
-    </button>
-  </div>
-</template>

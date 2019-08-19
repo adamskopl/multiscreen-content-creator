@@ -1,5 +1,5 @@
 import { factoryDevice, } from '../common/factoryDevice.mjs';
-import { devicesStorage, } from './devicesStorage.mjs';
+import { devicesStorage, } from '../common/devicesStorage.mjs';
 
 let content = {
   html: '',
@@ -26,12 +26,12 @@ export const ioServers = {
       this.nspDevices.emit('content.update', content);
     });
 
-    socket.on('device.update', (id, updatedDevice) => {
-      const device = devicesStorage.get(id);
+    socket.on('device.update', (updatedDevice) => {
+      const device = devicesStorage.get(updatedDevice.id);
       Object.assign(device, updatedDevice);
       this.nspDevices.to(device.socketId).emit(
         'device.update',
-        devicesStorage.get(id)
+        devicesStorage.get(device.id)
       );
     });
   },
@@ -39,9 +39,7 @@ export const ioServers = {
     socket.on('disconnect', () => {
       const device = devicesStorage.getBySocketId(socket.id);
       device.socketId = null;
-      this.nspEditor.emit('device.disconnect', {
-        id: device.id,
-      });
+      this.nspEditor.emit('device.disconnect', device.id);
       console.warn(`disconnect ${socket.id}`);
     });
 
@@ -61,9 +59,9 @@ export const ioServers = {
       cb(device);
     });
 
-    socket.on('device.update', (id, device) => {
-      Object.assign(devicesStorage.get(id), device);
-      this.nspEditor.emit('device.update', devicesStorage.get(id));
+    socket.on('device.update', (device) => {
+      Object.assign(devicesStorage.get(device.id), device);
+      this.nspEditor.emit('device.update', devicesStorage.get(device.id));
     });
 
     socket.on('content.get', (cb) => {

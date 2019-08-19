@@ -1,7 +1,7 @@
 import { getDeviceId, } from './utils.js';
 import { debounce, } from '/common/utils.mjs';
 import { consts, } from '/common/consts.mjs';
-import {} from './scaleSetter.js';
+import {} from '/common/components/scaleSetter.js';
 
 const scaleSetterVisiblityDebounce = 5000;
 
@@ -17,6 +17,7 @@ const app = new Vue({
       y: 0,
       scaleMultiplier: 0,
     },
+    socket: null,
     content: { // object synchronized with the server
       html: '',
     },
@@ -49,7 +50,7 @@ const app = new Vue({
 
         this.device.clientWidth = document.documentElement.clientWidth;
         this.device.clientHeight = document.documentElement.clientHeight;
-        this.socket.emit('device.update', getDeviceId(), this.device);
+        this.socket.emit('device.update', this.device);
 
         this.socket.emit('content.get', (content) => {
           Object.assign(this.content, content);
@@ -62,13 +63,13 @@ const app = new Vue({
     });
 
     this.socket.on('device.update', (device) => {
-      Object.assign(this.device, device);
+      this.device = device;
     });
 
     window.addEventListener('resize', () => {
       this.device.clientWidth = document.documentElement.clientWidth;
       this.device.clientHeight = document.documentElement.clientHeight;
-      this.socket.emit('device.update', getDeviceId(), this.device);
+      this.socket.emit('device.update', this.device);
     });
   },
 });

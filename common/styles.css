@@ -1,0 +1,9 @@
+.scale-setter {
+    position: absolute;
+}
+
+.scale-setter__button {
+    display: block;
+    width: 12em;
+    height: 12em;
+}

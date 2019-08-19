@@ -2,6 +2,7 @@
 <title>MCC</title>
 
 <link rel="stylesheet" href="./styles.css">
+<link rel="stylesheet" href="../common/styles.css">
 <link rel="stylesheet" href="libs/normalize.css">
 
 <script src="libs/pixi.js"></script>
@@ -26,7 +27,12 @@
     </div>
 
   </div>
-</div>
 
-<template id="devices-renderer">
-</template>
+  <scale-setter
+    v-if="selectedDevice"
+    :device="selectedDevice"
+    :socket="socket"
+    @device-update="onDeviceUpdate"
+  ></scale-setter>
+
+</div>

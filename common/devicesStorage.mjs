@@ -13,6 +13,7 @@ export const devicesStorage = {
       .find(device => device.socketId === socketId);
   },
   set(deviceId, device) {
+    if (typeof deviceId !== 'string') { console.error('wrong deviceId'); }
     devices.set(deviceId, device);
     return device;
   },
