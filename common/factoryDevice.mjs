@@ -15,8 +15,6 @@ const deviceProperties = [
   'y',
   'clientWidth', // device's dimension
   'clientHeight',
-  'contentWidth', // scaled content's dimension
-  'contentHeight',
   // used for i.a. devices physical size synchronization. It's a multiplier, not
   // a scale value, so that float value is not stored.
   'scaleMultiplier',
