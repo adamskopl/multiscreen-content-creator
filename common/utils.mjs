@@ -25,3 +25,18 @@ export function debounce(func, wait, immediate) {
 		if (callNow) func.apply(context, args);
 	};
 };
+
+// Used directives' 'inserted' function. Dispatches either Vue event or Dom
+// Event.
+export function dispatchDirectiveEvent({
+  name = 'noname',
+  arg = null,
+  el,
+  vnode,
+}) {
+  if (vnode.componentInstance) {
+    vnode.componentInstance.$emit(name, { detail: arg, });
+  } else {
+    el.dispatchEvent(new CustomEvent(name, { detail: arg, }));
+  }
+}
