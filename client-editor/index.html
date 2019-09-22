@@ -13,18 +13,19 @@
 
 <div id="app">
   <div class="editor-area">
+
     <div class="editor-area__content-container">
-      <img
-        :src="testImgSrc"
-      >
+      <img :src="testImgSrc">
     </div>
-    <div class="editor-area__canvas-container">
-      <devices-renderer
-        ref="devicesRenderer"
-        @device-position-change="onDevicePositionChange"
-        @device-click="onDeviceClick"
-      ></devices-renderer>
-    </div>
+
+    <device-image
+      v-for="d in devices"
+      :key="d.id"
+      :device="d"
+      :selected="d === selectedDevice"
+      @device-click="onDeviceClick"
+    >
+    </device-image>
 
   </div>
 

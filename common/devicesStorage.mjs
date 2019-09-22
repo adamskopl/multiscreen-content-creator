@@ -1,23 +1,23 @@
-// @key {string} device id, @value {device}
-const devices = new Map();
+const devices = [];
 
 export const devicesStorage = {
   get(deviceId) {
-    return devices.get(deviceId);
+    return devices.find(d => d.id === deviceId);
   },
   getAll() {
-    return Array.from(devices.values());
+    return devices;
   },
   getBySocketId(socketId) {
-    return Array.from(devices.values())
-      .find(device => device.socketId === socketId);
+    return devices.find(device => device.socketId === socketId);
   },
-  set(deviceId, device) {
-    if (typeof deviceId !== 'string') { console.error('wrong deviceId'); }
-    devices.set(deviceId, device);
-    return device;
+  add(newDevices) {
+    newDevices.forEach(d => this.delete(d.id));
+    devices.push(...newDevices);
   },
   delete(deviceId) {
-    devices.delete(deviceId);
+    const index = devices.findIndex(d => d.id === deviceId);
+    if (index !== -1) {
+      devices.splice(index, 1);
+    }
   },
 };

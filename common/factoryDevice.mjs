@@ -1,4 +1,4 @@
-import { arrayIsSubset, } from './utils.mjs';
+import { factoryTemplate, } from './factoryTemplate.mjs';
 
 /**
  * - Device keeps data which can be restored from the server either by 'device'
@@ -8,23 +8,21 @@ import { arrayIsSubset, } from './utils.mjs';
  * @typedef {Object} Device
  */
 
-const deviceProperties = [
-  'id',
-  'socketId', // assumption: only one socket for each device
-  'x', // device's x, y related to the content
-  'y',
-  'clientWidth', // device's dimension
-  'clientHeight',
+const required = true;
+const definingObject = {
+  id: { required, },
+  socketId: {}, // one socket for each device
+  x: { default: 0, }, // device's x, y related to the content
+  y: { default: 0, },
+  clientWidth: { default: 0, }, // device's dimension
+  clientHeight: { default: 0, },
   // used for i.a. devices physical size synchronization. It's a multiplier, not
   // a scale value, so that float value is not stored.
-  'scaleMultiplier',
-];
+  scaleMultiplier: { default: 0, },
+};
 
 export const factoryDevice = {
-  create(initProperties) {
-    if (!arrayIsSubset(deviceProperties, Object.keys(initProperties))) {
-      console.error(`wrong properties: ${initProperties}`);
-    }
-    return initProperties;
+  create(initObject) {
+    return factoryTemplate(definingObject, initObject);
   },
 };

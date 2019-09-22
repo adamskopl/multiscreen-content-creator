@@ -14,12 +14,12 @@ import { dispatchDirectiveEvent, } from '../utils.mjs';
   */
 Vue.directive('drag-events', {
   inserted(el, binding, vnode) {
-    let clientPosStart = { x: null, y: null, };
+    let lastPos = { x: null, y: null, };
 
     function onMouseUp() {
       dispatchDirectiveEvent({ name: 'drag-end', el, vnode, });
       document.removeEventListener('mouseup', onMouseUp);
-      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mousemove', onMove);
     }
 
     function onTouchEnd() {
@@ -28,43 +28,37 @@ Vue.directive('drag-events', {
       document.removeEventListener('touchmove', onTouchMove);
     }
 
-    function onMouseMove(e) {
+    function onMove(e) {
       dispatchDirectiveEvent({
         name: 'drag-move',
         arg: {
-          offsetX: e.clientX - clientPosStart.x,
-          offsetY: e.clientY - clientPosStart.y,
+          offsetX: e.clientX - lastPos.x,
+          offsetY: e.clientY - lastPos.y,
         },
         el,
         vnode,
       });
+      lastPos.x = e.clientX;
+      lastPos.y = e.clientY;
     }
 
     function onTouchMove(e) {
-      dispatchDirectiveEvent({
-        name: 'drag-move',
-        arg: {
-          offsetX: e.touches[0].clientX - clientPosStart.x,
-          offsetY: e.touches[0].clientY - clientPosStart.y,
-        },
-        el,
-        vnode,
-      });
+      onMove(e.touches[0]);
     }
 
     el.addEventListener('touchstart', (e) => {
       e.preventDefault(); // prevent mouse events
-      clientPosStart = { x: e.touches[0].clientX, y: e.touches[0].clientY, };
+      lastPos = { x: e.touches[0].clientX, y: e.touches[0].clientY, };
       dispatchDirectiveEvent({ name: 'drag-start', el, vnode, });
       document.addEventListener('touchend', onTouchEnd);
       document.addEventListener('touchmove', onTouchMove);
     });
 
     el.addEventListener('mousedown', (e) => {
-      clientPosStart = { x: e.clientX, y: e.clientY, };
+      lastPos = { x: e.clientX, y: e.clientY, };
       dispatchDirectiveEvent({ name: 'drag-start', el, vnode, });
       document.addEventListener('mouseup', onMouseUp);
-      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mousemove', onMove);
     });
   },
 });

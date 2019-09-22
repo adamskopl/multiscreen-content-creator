@@ -26,9 +26,8 @@ export const ioServers = {
       this.nspDevices.emit('content.update', content);
     });
 
-    socket.on('device.update', (updatedDevice) => {
-      const device = devicesStorage.get(updatedDevice.id);
-      Object.assign(device, updatedDevice);
+    socket.on('device.update', (device) => {
+      devicesStorage.add([device]);
       this.nspDevices.to(device.socketId).emit(
         'device.update',
         devicesStorage.get(device.id)
@@ -37,10 +36,10 @@ export const ioServers = {
   },
   onConnectDevice(socket) {
     socket.on('disconnect', () => {
+      console.warn(`servers device.disconnect ${socket.id}`);
       const device = devicesStorage.getBySocketId(socket.id);
       device.socketId = null;
       this.nspEditor.emit('device.disconnect', device.id);
-      console.warn(`disconnect ${socket.id}`);
     });
 
     socket.on('device.get', (id, cb) => {
@@ -48,19 +47,17 @@ export const ioServers = {
     });
 
     socket.on('device.login', (id, cb) => {
-      const device = devicesStorage.get(id)
-        || devicesStorage.set(id, factoryDevice.create({
-          id,
-          x: 0,
-          y: 0,
-          scaleMultiplier: 0,
-        }));
-      device.socketId = socket.id;
-      cb(device);
+      console.warn(`servers device.login ${id}`);
+      devicesStorage.add([
+        devicesStorage.get(id)
+        || factoryDevice.create({ id })
+      ]);
+      devicesStorage.get(id).socketId = socket.id;
+      cb(devicesStorage.get(id));
     });
 
     socket.on('device.update', (device) => {
-      Object.assign(devicesStorage.get(device.id), device);
+      devicesStorage.add([device]);
       this.nspEditor.emit('device.update', devicesStorage.get(device.id));
     });
 

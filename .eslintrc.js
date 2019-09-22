@@ -10,7 +10,8 @@ module.exports = {
     'window': true,
     'Vue': true,
     'io': true,
-    'PIXI': true
+    'PIXI': true,
+    'R': true
   },
   'parserOptions': {
     'ecmaVersion': 2018,
@@ -30,16 +31,7 @@ module.exports = {
     'prefer-rest-params': 'off',
     'function-paren-newline': ['error', 'consistent'],
     'no-param-reassign': 'off',
-    'comma-dangle': [
-      'error', {
-        'arrays': 'always',
-        'objects': 'always',
-        'imports': 'always',
-        'exports': 'always',
-        'functions': 'ignore'
-      }
-    ],
-    // RAPID DEV SETTINGS SECTION:
+    'comma-dangle': 'off',
     'no-debugger': 'off'
   },
   'plugins': [

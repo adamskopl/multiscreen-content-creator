@@ -24,9 +24,9 @@ export function debounce(func, wait, immediate) {
 		timeout = setTimeout(later, wait);
 		if (callNow) func.apply(context, args);
 	};
-};
+}
 
-// Used directives' 'inserted' function. Dispatches either Vue event or Dom
+// Used in directive's 'inserted' function. Dispatches either Vue event or Dom
 // Event.
 export function dispatchDirectiveEvent({
   name = 'noname',

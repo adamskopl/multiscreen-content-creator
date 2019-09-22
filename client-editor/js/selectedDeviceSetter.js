@@ -6,7 +6,12 @@ export const selectedDeviceSetter = {
       app.selectedDevice = null;
     }
   },
-  onDeviceClick(app, deviceId) {
-    app.selectedDevice = devicesStorage.get(deviceId);
+  onDeviceClick(app, device) {
+    app.selectedDevice = device;
+  },
+  onDeviceUpdate(app, device) {
+    if (app.selectedDevice && app.selectedDevice.id === device.id) {
+      app.selectedDevice = device;
+    }
   },
 };
