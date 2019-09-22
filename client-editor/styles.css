@@ -15,6 +15,10 @@
     height: 1080px;
 }
 
+.editor-area__content-container {
+    pointer-events: none;
+}
+
 .device-drag {
     position: absolute;
     border: 5px dotted red;

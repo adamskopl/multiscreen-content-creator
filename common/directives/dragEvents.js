@@ -2,7 +2,7 @@ import { dispatchDirectiveEvent, } from '../utils.mjs';
 
 /*
   <div
-  v-drag-emit
+  v-drag-events.{inverted}
   @drag-start="onDragStart"
   @drag-end="onDragEnd"
   @drag-move="onDragMove"
@@ -14,6 +14,7 @@ import { dispatchDirectiveEvent, } from '../utils.mjs';
   */
 Vue.directive('drag-events', {
   inserted(el, binding, vnode) {
+    const inverted = binding.modifiers.inverted ? -1 : 1;
     let lastPos = { x: null, y: null, };
 
     function onMouseUp() {
@@ -32,8 +33,8 @@ Vue.directive('drag-events', {
       dispatchDirectiveEvent({
         name: 'drag-move',
         arg: {
-          offsetX: e.clientX - lastPos.x,
-          offsetY: e.clientY - lastPos.y,
+          offsetX: inverted * (e.clientX - lastPos.x),
+          offsetY: inverted * (e.clientY - lastPos.y),
         },
         el,
         vnode,

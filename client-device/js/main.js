@@ -1,7 +1,8 @@
-import { getDeviceId, } from './utils.js';
+import {} from '/common/directives/dragEvents.js';
 import { debounce, } from '/common/utils.mjs';
 import { consts, } from '/common/consts.mjs';
 import {} from '/common/components/scaleSetter.js';
+import { getDeviceId, } from './utils.js';
 
 const scaleSetterVisiblityDebounce = 5000;
 
@@ -30,10 +31,15 @@ const app = new Vue({
     },
   },
   methods: {
-    onAppClick() {
+    onDragStart() {
       this.scaleSetterVisible = true;
       hideScaleSetterDebounce(this);
     },
+    onDragMove(e) {
+      this.device.x += e.detail.offsetX;
+      this.device.y += e.detail.offsetY;
+      this.socket.emit('device.update', this.device);
+    }
   },
   mounted() {
     this.socket = io('/devices');

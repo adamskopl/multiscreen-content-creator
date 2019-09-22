@@ -17,8 +17,22 @@
 
 <script src="js/main.js" type="module"></script>
 
-<div id="app" @click="onAppClick">
-  <div class="content" v-html="content.html" :style="contentStyle"></div>
+
+<div
+  id="app"
+>
+  <div
+    v-drag-events.inverted
+    @drag-start="onDragStart"
+    @drag-move="onDragMove"
+    class="content-wrap"
+  >
+    <div
+      v-html="content.html"
+      :style="contentStyle"
+      class="content"
+    ></div>
+  </div>
 
   <scale-setter
     v-if="scaleSetterVisible"

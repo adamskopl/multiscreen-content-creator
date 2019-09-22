@@ -1,5 +1,6 @@
 .scale-setter {
     position: absolute;
+    top: 0;
 }
 
 .scale-setter__button {
