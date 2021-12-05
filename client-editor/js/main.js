@@ -13,7 +13,7 @@ function getHtmlContent() {
 let app = new Vue({
   el: '#app',
   data: {
-    testImgSrc: 'assets/test-bobby-burger-grid.jpg',
+    testImgSrc: 'assets/metro.png',
     selectedDevice: null,
     socket: store.state.socket,
     devices: store.state.devices

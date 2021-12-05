@@ -1,7 +1,7 @@
 import http from 'http';
 import express from 'express';
 import IOServer from 'socket.io';
-import uuid from 'uuid/v1';
+import uuid from 'uuid';
 
 import { ioServers, } from './ioServers.mjs';
 
@@ -16,7 +16,7 @@ app.use('/editor', express.static('client-editor'));
 
 app.get('/devices', (req, res) => {
   // redirect to the random id
-  res.redirect(`/devices/${uuid().substr(0, 8)}`); // only part of uuid used
+  res.redirect(`/devices/${uuid().substr(0, 2)}`); // only part of uuid used
 });
 app.use('/devices/:id', express.static('client-device'));
 app.use('/common', express.static('common'));
