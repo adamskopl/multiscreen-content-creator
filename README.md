@@ -1,5 +1,7 @@
 # multiscreen-content-creator
 
+![mcc-image](https://raw.githubusercontent.com/adamskopl/multiscreen-content-creator/master/assets/mcc.jpg "mcc image")
+
 # purpose of project
 
 - to display some content in multiple browser windows on multiple devices
