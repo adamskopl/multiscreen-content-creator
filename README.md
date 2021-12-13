@@ -2,7 +2,7 @@
 
 ![mcc-image](https://raw.githubusercontent.com/adamskopl/multiscreen-content-creator/master/assets/mcc.jpg "mcc image")
 
-# purpose of project
+# purpose of the project
 
 - to display some content in multiple browser windows on multiple devices
 - to manage the way connected devices display content through an editor
